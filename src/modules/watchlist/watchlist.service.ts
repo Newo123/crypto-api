@@ -11,9 +11,12 @@ export class WatchListService {
     private readonly watchList: typeof WatchListModel,
   ) {}
 
-  async create(user, dto: WatchListDto): Promise<CreateAssetResponse> {
+  async create(
+    userId: number,
+    dto: WatchListDto,
+  ): Promise<CreateAssetResponse> {
     const watchList = {
-      user: user.id,
+      user: userId,
       name: dto.name,
       assetId: dto.assetId,
     };

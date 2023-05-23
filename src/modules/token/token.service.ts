@@ -14,7 +14,7 @@ export class TokenService {
 
     return this.jwtService.sign(payload, {
       secret: this.configService.get('SECRET'),
-      expiresIn: (this.configService.get('TIME') + 's').toString(),
+      expiresIn: this.configService.get('TOKEN_LIFE_CYCLE'),
     });
   }
 }
