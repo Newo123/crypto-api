@@ -26,8 +26,8 @@ export class WatchListController {
     @Body() dto: WatchListDto,
     @Req() request,
   ): Promise<CreateAssetResponse> {
-    const user = request.user;
-    return this.watchListService.create(user, dto);
+    const { id } = request.user;
+    return this.watchListService.create(id, dto);
   }
 
   @ApiTags('API')

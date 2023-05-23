@@ -4,6 +4,7 @@ import { AppError } from 'src/common/constants/errors';
 import { TokenService } from '../token/token.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
+import { AuthResponse } from './auth.response';
 import { LoginUserDto } from './dto/user-login.dto';
 
 @Injectable()
@@ -23,7 +24,7 @@ export class AuthService {
     return this.userService.createUser(dto);
   }
 
-  async login(dto: LoginUserDto): Promise<any> {
+  async login(dto: LoginUserDto): Promise<AuthResponse> {
     const existUser = await this.userService.findUserByEmail(dto.email);
     if (!existUser) {
       throw new BadRequestException(AppError.USER_NOT_EXIST);
