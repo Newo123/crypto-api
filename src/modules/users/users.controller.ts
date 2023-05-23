@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  HttpCode,
   Patch,
   Req,
   UseGuards,
@@ -18,6 +19,7 @@ export class UsersController {
   @ApiTags('API')
   @ApiResponse({ status: 200, type: UpdateUserDto })
   @UseGuards(JwtAuthGuard)
+  @HttpCode(200)
   @Patch()
   async update(
     @Body() dto: UpdateUserDto,
@@ -27,9 +29,12 @@ export class UsersController {
     return this.userService.update(user.email, dto);
   }
 
+  @ApiTags('API')
+  @ApiResponse({ status: 200, type: UpdateUserDto })
   @UseGuards(JwtAuthGuard)
+  @HttpCode(200)
   @Delete()
-  async delete(@Req() request) {
+  async delete(@Req() request): Promise<boolean> {
     const user = await request.user;
     return this.userService.delete(user.email);
   }

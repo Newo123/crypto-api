@@ -1,5 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { SequelizeModuleOptions } from '@nestjs/sequelize';
+import { User } from 'src/modules/users/user.model';
+import { WatchListModel } from 'src/modules/watchlist/watchlist.model';
 
 export const getSequelizeConfig = async (
   configService: ConfigService,
@@ -13,6 +15,6 @@ export const getSequelizeConfig = async (
     database: configService.get('DB_NAME'),
     synchronize: true,
     autoLoadModels: true,
-    models: [],
+    models: [User, WatchListModel],
   };
 };
