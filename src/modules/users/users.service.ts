@@ -10,43 +10,69 @@ import { User } from './user.model';
 export class UsersService {
   constructor(@InjectModel(User) private readonly user: typeof User) {}
 
-  async findUserByEmail(email: string) {
-    return this.user.findOne({ where: { email: email } });
+  async findUserByEmail(email: string): Promise<User> {
+    try {
+      return this.user.findOne({
+        where: { email: email },
+        include: {
+          model: WatchListModel,
+          required: false,
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async createUser(dto: CreateUserDto): Promise<CreateUserDto> {
-    dto.password = await bcrypt.hash(dto.password, 10);
-    await this.user.create({
-      name: dto.name,
-      userName: dto.userName,
-      email: dto.email,
-      password: dto.password,
-    });
+    try {
+      dto.password = await bcrypt.hash(dto.password, 10);
+      await this.user.create({
+        name: dto.name,
+        userName: dto.userName,
+        email: dto.email,
+        password: dto.password,
+      });
 
-    return dto;
+      return dto;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  async publicUser(email: string) {
-    return this.user.findOne({
-      where: { email },
-      attributes: { exclude: ['password'] },
-      include: {
-        model: WatchListModel,
-        required: false,
-      },
-    });
+  async publicUser(email: string): Promise<User> {
+    try {
+      return this.user.findOne({
+        where: { email },
+        attributes: { exclude: ['password'] },
+        include: {
+          model: WatchListModel,
+          required: false,
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async update(email: string, dto: UpdateUserDto): Promise<UpdateUserDto> {
-    await this.user.update(dto, { where: { email } });
-    return dto;
+    try {
+      await this.user.update(dto, { where: { email } });
+      return dto;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async delete(email: string): Promise<boolean> {
-    const user = await this.user.destroy({ where: { email } });
+    try {
+      const user = await this.user.destroy({ where: { email } });
 
-    const isDeleted = (await user) ? true : false;
+      const isDeleted = (await user) ? true : false;
 
-    return isDeleted;
+      return isDeleted;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }
