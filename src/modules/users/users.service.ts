@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
+import { WatchListModel } from '../watchlist/watchlist.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.model';
@@ -29,6 +30,10 @@ export class UsersService {
     return this.user.findOne({
       where: { email },
       attributes: { exclude: ['password'] },
+      include: {
+        model: WatchListModel,
+        required: false,
+      },
     });
   }
 
@@ -37,7 +42,7 @@ export class UsersService {
     return dto;
   }
 
-  async delete(email: string) {
+  async delete(email: string): Promise<boolean> {
     const user = await this.user.destroy({ where: { email } });
 
     const isDeleted = (await user) ? true : false;

@@ -5,6 +5,7 @@ import { getSequelizeConfig } from 'src/configs/sequelize.config';
 import { AuthModule } from '../auth/auth.module';
 import { TokenModule } from '../token/token.module';
 import { UsersModule } from '../users/users.module';
+import { WatchListModule } from '../watchlist/watchlist.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -13,6 +14,7 @@ import { AppService } from './app.service';
     UsersModule,
     AuthModule,
     TokenModule,
+    WatchListModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
