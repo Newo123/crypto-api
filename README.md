@@ -32,6 +32,25 @@
 $ npm install
 ```
 
+## Next step: open .env, fill in the fields in it
+```bash
+DB_HOST=
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+DB_PORT=
+DB_DIALECT=
+PORT=
+SECRET=
+TOKEN_LIFE_CYCLE=""
+```
+
+## Next step: open the console and run the command in the root of the project
+```bash
+docker-compose up -d
+```
+## if an error occurs, make sure that docker is installed or enabled on the local machine
+
 ## Running the app
 
 ```bash
