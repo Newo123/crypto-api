@@ -5,7 +5,11 @@ import { getSwaggerConfig } from './configs/swagger.config';
 import { AppModule } from './modules/app/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: {
+      origin: ['http://localhost:3000'],
+    },
+  });
   const configService = new ConfigService();
   app.useGlobalPipes(new ValidationPipe());
   getSwaggerConfig(app);
