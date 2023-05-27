@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
+import { AuthResponse } from '../auth/auth.response';
+import { TokenService } from '../token/token.service';
 import { WatchListModel } from '../watchlist/watchlist.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -8,7 +10,10 @@ import { User } from './user.model';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User) private readonly user: typeof User) {}
+  constructor(
+    @InjectModel(User) private readonly user: typeof User,
+    private readonly tokenService: TokenService,
+  ) {}
 
   async findUserByEmail(email: string): Promise<User> {
     try {
@@ -20,7 +25,7 @@ export class UsersService {
         },
       });
     } catch (error) {
-      throw new Error(error);
+      throw new BadRequestException(error);
     }
   }
 
@@ -36,13 +41,13 @@ export class UsersService {
 
       return dto;
     } catch (error) {
-      throw new Error(error);
+      throw new BadRequestException(error);
     }
   }
 
-  async publicUser(email: string): Promise<User> {
+  async publicUser(email: string): Promise<AuthResponse> {
     try {
-      return this.user.findOne({
+      const user = await this.user.findOne({
         where: { email },
         attributes: { exclude: ['password'] },
         include: {
@@ -50,8 +55,10 @@ export class UsersService {
           required: false,
         },
       });
+      const token = await this.tokenService.getToken(user);
+      return { user, token };
     } catch (error) {
-      throw new Error(error);
+      throw new BadRequestException(error);
     }
   }
 
@@ -60,7 +67,7 @@ export class UsersService {
       await this.user.update(dto, { where: { email } });
       return dto;
     } catch (error) {
-      throw new Error(error);
+      throw new BadRequestException(error);
     }
   }
 
@@ -72,7 +79,7 @@ export class UsersService {
 
       return isDeleted;
     } catch (error) {
-      throw new Error(error);
+      throw new BadRequestException(error);
     }
   }
 }

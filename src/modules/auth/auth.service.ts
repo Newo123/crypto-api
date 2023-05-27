@@ -14,7 +14,7 @@ export class AuthService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async register(dto: CreateUserDto): Promise<CreateUserDto> {
+  async register(dto: CreateUserDto): Promise<AuthResponse> {
     try {
       const existUser = await this.userService.findUserByEmail(dto.email);
 
@@ -22,9 +22,10 @@ export class AuthService {
         throw new BadRequestException(AppError.USER_EXIST);
       }
 
-      return this.userService.createUser(dto);
+      await this.userService.createUser(dto);
+      return this.userService.publicUser(dto.email);
     } catch (error) {
-      throw new Error(error);
+      throw new BadRequestException(error);
     }
   }
 
@@ -43,12 +44,9 @@ export class AuthService {
         throw new BadRequestException(AppError.WRONG_DATA);
       }
 
-      const user = await this.userService.publicUser(dto.email);
-      const token = await this.tokenService.getToken(user);
-
-      return { user, token };
+      return this.userService.publicUser(dto.email);
     } catch (error) {
-      throw new Error(error);
+      throw new BadRequestException(error);
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateAssetResponse } from './create-watchList.response';
 import { WatchListDto } from './dto/watchlist.dto';
@@ -25,7 +25,7 @@ export class WatchListService {
       await this.watchList.create(watchList);
       return watchList;
     } catch (error) {
-      throw new Error(error);
+      throw new BadRequestException(error);
     }
   }
 
@@ -38,7 +38,7 @@ export class WatchListService {
       const isDeleted = (await deleteAsset) ? true : false;
       return isDeleted;
     } catch (error) {
-      throw new Error(error);
+      throw new BadRequestException(error);
     }
   }
 }

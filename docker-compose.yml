@@ -1,17 +1,18 @@
-version: '4'
+version: '3.9'
 services:
   postgresql:
-    image: postgres
+    image: postgres:15.3
     container_name: postgres
     ports:
       - 5432:5432
-    volumes:
-      - ./postgres-data:/data/db
+    
     environment:
       - POSTGRES_HOST=localhost
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DATABASE=postgres
+    volumes:
+      - .:/postgres-data:/data/db
     command: postgres
     restart: always
 
