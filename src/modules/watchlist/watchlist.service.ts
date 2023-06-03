@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateAssetResponse } from './create-watchList.response';
 import { WatchListDto } from './dto/watchlist.dto';
@@ -26,6 +30,14 @@ export class WatchListService {
       return watchList;
     } catch (error) {
       throw new BadRequestException(error);
+    }
+  }
+
+  async getUserAsset(userId: number): Promise<WatchListModel[]> {
+    try {
+      return this.watchList.findAll({ where: { user: userId } });
+    } catch (error) {
+      throw new NotFoundException(error);
     }
   }
 
