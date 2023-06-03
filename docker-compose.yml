@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.8'
 services:
   postgresql:
     image: postgres:15.3
@@ -12,7 +12,7 @@ services:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DATABASE=postgres
     volumes:
-      - .:/postgres-data:/data/db
+      - ./postgres-data:/data/db
     command: postgres
     restart: always
 
