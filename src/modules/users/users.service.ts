@@ -62,9 +62,9 @@ export class UsersService {
     }
   }
 
-  async update(email: string, dto: UpdateUserDto): Promise<UpdateUserDto> {
+  async update(id: number, dto: UpdateUserDto): Promise<UpdateUserDto> {
     try {
-      await this.user.update(dto, { where: { email } });
+      await this.user.update(dto, { where: { id } });
       return dto;
     } catch (error) {
       throw new BadRequestException(error);
