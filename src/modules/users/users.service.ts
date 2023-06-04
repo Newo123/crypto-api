@@ -1,10 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
+import { AppError } from 'src/common/constants/errors';
 import { AuthResponse } from '../auth/auth.response';
 import { TokenService } from '../token/token.service';
 import { WatchListModel } from '../watchlist/watchlist.model';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.model';
 
@@ -19,6 +21,20 @@ export class UsersService {
     try {
       return this.user.findOne({
         where: { email: email },
+        include: {
+          model: WatchListModel,
+          required: false,
+        },
+      });
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  async findUserById(id: number): Promise<User> {
+    try {
+      return this.user.findOne({
+        where: { id },
         include: {
           model: WatchListModel,
           required: false,
@@ -66,6 +82,22 @@ export class UsersService {
     try {
       await this.user.update(dto, { where: { id } });
       return dto;
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  async updatePassword(id: number, dto: UpdatePasswordDto): Promise<any> {
+    try {
+      const { password } = await this.findUserById(id);
+      const currentPassword = await bcrypt.compare(dto.oldPassword, password);
+      if (!currentPassword) {
+        return new BadRequestException(AppError.WRONG_DATA);
+      }
+      const data = {
+        password: await bcrypt.hash(dto.newPassword, 10),
+      };
+      return this.user.update(data, { where: { id } });
     } catch (error) {
       throw new BadRequestException(error);
     }

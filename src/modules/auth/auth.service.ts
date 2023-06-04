@@ -29,7 +29,7 @@ export class AuthService {
     }
   }
 
-  async login(dto: LoginUserDto): Promise<AuthResponse> {
+  async login(dto: LoginUserDto): Promise<AuthResponse | BadRequestException> {
     try {
       const existUser = await this.userService.findUserByEmail(dto.email);
       if (!existUser) {
@@ -41,7 +41,7 @@ export class AuthService {
         existUser.password,
       );
       if (!validatePassword) {
-        throw new BadRequestException(AppError.WRONG_DATA);
+        return new BadRequestException(AppError.WRONG_DATA);
       }
 
       return this.userService.publicUser(dto.email);

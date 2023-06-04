@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -33,7 +34,9 @@ export class AuthController {
   @ApiResponse({ status: 200, type: AuthResponse })
   @HttpCode(200)
   @Post('login')
-  async login(@Body() dto: LoginUserDto): Promise<AuthResponse> {
+  async login(
+    @Body() dto: LoginUserDto,
+  ): Promise<AuthResponse | BadRequestException> {
     return this.authService.login(dto);
   }
 

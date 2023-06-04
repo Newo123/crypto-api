@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
@@ -27,6 +28,19 @@ export class UsersController {
   ): Promise<UpdateUserDto> {
     const user = request.user;
     return this.userService.update(user.id, dto);
+  }
+
+  @ApiTags('API')
+  @ApiResponse({ status: 200 })
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(200)
+  @Patch('change-password')
+  async updatePassword(
+    @Body() dto: UpdatePasswordDto,
+    @Req() request,
+  ): Promise<UpdatePasswordDto> {
+    const user = request.user;
+    return this.userService.updatePassword(user.id, dto);
   }
 
   @ApiTags('API')
