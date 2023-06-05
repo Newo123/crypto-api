@@ -39,8 +39,10 @@ export class AuthController {
   ): Promise<AuthResponse | BadRequestException> {
     return this.authService.login(dto);
   }
-
+  @ApiTags('API')
+  @ApiResponse({ status: 200, type: AuthResponse })
   @UseGuards(JwtAuthGuard)
+  @HttpCode(200)
   @Get('get-public-user-info')
   async getPublicUserInfo(@Req() request) {
     return this.userService.publicUser(request.user.email);
