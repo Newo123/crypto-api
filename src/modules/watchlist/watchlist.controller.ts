@@ -40,9 +40,9 @@ export class WatchListController {
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   @Get('get-elements')
-  getUserAsset(@Req() request): Promise<WatchListModel[]> {
-    const user = request.user;
-    return this.watchListService.getUserAsset(user.id);
+  async getUserAsset(@Req() request): Promise<WatchListModel[]> {
+    const { id } = await request.user;
+    return this.watchListService.getUserAsset(id);
   }
 
   @ApiTags('API')
