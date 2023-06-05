@@ -50,6 +50,6 @@ export class UsersController {
   @Delete()
   async delete(@Req() request): Promise<boolean> {
     const user = await request.user;
-    return this.userService.delete(user.email);
+    return this.userService.delete(user.id);
   }
 }
