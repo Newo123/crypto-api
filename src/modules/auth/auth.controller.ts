@@ -40,7 +40,7 @@ export class AuthController {
     return this.authService.login(dto);
   }
   @ApiTags('API')
-  @ApiResponse({ status: 200, type: AuthResponse })
+  @ApiResponse({ status: 200 })
   @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @Get('get-public-user-info')
