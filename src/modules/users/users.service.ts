@@ -103,9 +103,9 @@ export class UsersService {
     }
   }
 
-  async delete(email: string): Promise<boolean> {
+  async delete(id: number): Promise<boolean> {
     try {
-      const user = await this.user.destroy({ where: { email } });
+      const user = await this.user.destroy({ where: { id } });
 
       const isDeleted = (await user) ? true : false;
 
