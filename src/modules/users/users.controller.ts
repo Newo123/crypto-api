@@ -26,8 +26,8 @@ export class UsersController {
     @Body() dto: UpdateUserDto,
     @Req() request,
   ): Promise<UpdateUserDto> {
-    const user = request.user;
-    return this.userService.update(user.id, dto);
+    const user = await request.user;
+    return this.userService.update(user.email, dto);
   }
 
   @ApiTags('API')
@@ -39,7 +39,7 @@ export class UsersController {
     @Body() dto: UpdatePasswordDto,
     @Req() request,
   ): Promise<UpdatePasswordDto> {
-    const user = request.user;
+    const user = await request.user;
     return this.userService.updatePassword(user.id, dto);
   }
 
