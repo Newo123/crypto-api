@@ -27,7 +27,7 @@ export class UsersController {
     @Req() request,
   ): Promise<UpdateUserDto> {
     const user = await request.user;
-    return this.userService.update(user.email, dto);
+    return this.userService.update(user.id, dto);
   }
 
   @ApiTags('API')
